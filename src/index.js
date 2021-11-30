@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-import "./styles.css";
+import "./index.css";
 
 function fib(n) {
   if (n <= 1) return n;
@@ -12,6 +12,26 @@ function FibonacciCounter({ initialN }) {
   const [fibs, setFibs] = useState(getInitialFibs);
   const [n, setN] = useState(initialN);
   const currentFibonacciNumber = fibs.current;
+
+  const [counter, setCounter] = useState(false);
+
+
+  useEffect(() => {
+    if (counter) {
+      var intervalId = setInterval(() => incrementN(), 1000);
+    }
+    return () => {
+      console.count("Interval cleared");
+      clearInterval(intervalId);
+    };
+  }, [counter]);
+
+
+  useEffect(() => {
+    document.title = `I've calculated ${currentFibonacciNumber}`;
+    console.count("The effect has been called");
+  }, [currentFibonacciNumber]);
+
   useEffect(() => {
     document.title = `I've calculated ${currentFibonacciNumber}`;
     console.count("The effect has been called");
@@ -66,6 +86,14 @@ function FibonacciCounter({ initialN }) {
       >
         <h2>Reset</h2>
       </button>
+
+      <input type="checkbox"
+      onClick={() => {
+        setCounter(!counter)
+       console.log("Klikniety checkbox")
+      }}
+       id="topping" /> Increase every second
+
     </div>
   );
 }
@@ -93,6 +121,7 @@ function App() {
       <button onClick={() => setSpyOnUser(prev => !prev)}>
         Toggle spying on user
       </button>
+
       {spyOnUser && <TimeOnPage />}
     </div>
   );
